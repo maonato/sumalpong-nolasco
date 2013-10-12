@@ -1,7 +1,7 @@
 sumalpong-nolasco
 =================
 #!/bin/bash
-function update(){
+update(){
 hosts=$(<server)
 newpub=$(<mykey2.pub)
 for i in $hosts
@@ -9,7 +9,7 @@ do
 ssh -i mykey user@$i "echo $newpub > storage && cat .ssh/authorized_keys >> storage && cat storage > .ssh/authorized_keys && rm storage"
 done
 }
-function delete(){
+delete(){
 hosts=$(<server)
 for i in $hosts
 do
