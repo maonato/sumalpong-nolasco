@@ -1,18 +1,19 @@
-sumalpong-nolasco
-=================
 #!/bin/bash
-update(){
 hosts=$(<server)
 newpub=$(<mykey2.pub)
+function updating_key(){
+  ssh -i mykey user@$i "echo $newpub > storage && cat .ssh/authorized_keys >> storage && cat storage > .ssh/authorized_keys && rm storage"
+}
+function delete_key(){
+  ssh -i mykey2 user@$i "touch storage && cat .ssh/authorized_keys > storage && sed '2d' storage  > .ssh/authorized_keys && rm storage"
+}
 for i in $hosts
 do
-ssh -i mykey user@$i "echo $newpub > storage && cat .ssh/authorized_keys >> storage && cat storage > .ssh/authorized_keys && rm storage"
+  $1
+  if [ $? -eq 0 ]
+  then
+    echo "$i $1 success"
+  else
+    echo "$i $1 failed"
+  fi
 done
-}
-delete(){
-hosts=$(<server)
-for i in $hosts
-do
-ssh -i mykey2 user@$i "touch storage && cat .ssh/authorized_keys > storage && sed '2d' storage  > .ssh/authorized_keys && rm storage"
-done
-}
